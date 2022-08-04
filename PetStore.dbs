@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Pet_Store" id="Project-341" database="MySql" >
+	<schema name="pet_store" >
+		<table name="doctor" prior="docter" >
+			<column name="doctor_id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="first_name" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<column name="last_name" type="VARCHAR" length="50" jt="12" mandatory="y" />
+			<column name="date_joined" type="DATE" jt="91" >
+				<defo><![CDATA[CURRENT_DATE]]></defo>
+			</column>
+			<index name="pk_docter" unique="PRIMARY_KEY" >
+				<column name="doctor_id" />
+			</index>
+			<fk name="fk_docter_doctor_pet_type" to_schema="pet_store" to_table="doctor_pet_type" >
+				<fk_column name="doctor_id" pk="doctor_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="doctor_pet_type" prior="doctor_" >
+			<column name="doctor_id" type="INT" jt="4" mandatory="y" />
+			<column name="pet_type_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_doctor_pet_type" unique="PRIMARY_KEY" >
+				<column name="doctor_id" />
+				<column name="pet_type_id" />
+			</index>
+			<index name="unq_doctor_pet_type_doctor_id" unique="UNIQUE_KEY" >
+				<column name="doctor_id" />
+			</index>
+			<index name="unq_doctor_pet_type_pet_type_id" unique="UNIQUE_KEY" >
+				<column name="pet_type_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="owner" prior="tbl" >
+			<column name="owner_id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="first_name" type="VARCHAR" length="30" jt="12" />
+			<column name="last_name" type="VARCHAR" length="40" jt="12" />
+			<column name="mailing_adress" type="VARCHAR" length="100" jt="12" />
+			<column name="phone_num" type="INT" jt="4" />
+			<column name="e-mail_adress" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_owner" unique="PRIMARY_KEY" >
+				<column name="owner_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="pet_type" prior="tbl" >
+			<column name="pet_type_id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="pet_type_name" type="VARCHAR" length="100" jt="12" mandatory="y" />
+			<index name="pk_pet_type" unique="PRIMARY_KEY" >
+				<column name="pet_type_id" />
+			</index>
+			<fk name="fk_pet_type_doctor_pet_type" to_schema="pet_store" to_table="doctor_pet_type" >
+				<fk_column name="pet_type_id" pk="pet_type_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="pets" prior="tbl" >
+			<column name="pet_id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="pet_type_id" prior="pet_type" type="VARCHAR" length="30" jt="12" mandatory="y" />
+			<column name="pet_name" type="VARCHAR" length="100" jt="12" />
+			<column name="owner_id" type="INT" jt="4" mandatory="y" />
+			<column name="birth_date" type="DATE" jt="91" >
+				<defo><![CDATA[CURRENT_DATE]]></defo>
+			</column>
+			<index name="pk_pets" unique="PRIMARY_KEY" >
+				<column name="pet_id" />
+			</index>
+			<fk name="fk_pets_owner" to_schema="pet_store" to_table="owner" >
+				<fk_column name="owner_id" pk="owner_id" />
+			</fk>
+			<fk name="fk_pets_pet_type" to_schema="pet_store" to_table="pet_type" >
+				<fk_column name="pet_type_id" pk="pet_type_id" />
+			</fk>
+			<fk name="fk_pets_vacination_record_pet" to_schema="pet_store" to_table="vaccination_record_pet" >
+				<fk_column name="pet_id" pk="pet_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="vaccination_record" prior="vacination_record" >
+			<column name="vax_id" type="INT" jt="4" mandatory="y" >
+				<identity><![CDATA[AUTO_INCREMENT]]></identity>
+			</column>
+			<column name="doctor_id" type="INT" jt="4" mandatory="y" />
+			<column name="date" type="DATE" jt="91" >
+				<defo><![CDATA[CURRENT_DATE]]></defo>
+			</column>
+			<column name="is_vacinated" type="BOOLEAN" jt="16" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<index name="pk_vacination_record" unique="PRIMARY_KEY" >
+				<column name="vax_id" />
+			</index>
+			<fk name="fk_vacination_record_docter" to_schema="pet_store" to_table="doctor" >
+				<fk_column name="doctor_id" pk="doctor_id" />
+			</fk>
+			<fk name="fk_vacination_record" to_schema="pet_store" to_table="vaccination_record_pet" >
+				<fk_column name="vax_id" pk="vax_id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="vaccination_record_pet" prior="vacination_record_pet" >
+			<column name="vax_id" type="INT" jt="4" mandatory="y" />
+			<column name="pet_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_vacination_record_pet" unique="PRIMARY_KEY" >
+				<column name="vax_id" />
+				<column name="pet_id" />
+			</index>
+			<index name="unq_vacination_record_pet_vax_id" unique="UNIQUE_KEY" >
+				<column name="vax_id" />
+			</index>
+			<index name="unq_vacination_record_pet_pet_id" unique="UNIQUE_KEY" >
+				<column name="pet_id" />
+			</index>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-13a0" show_relation="columns" >
+		<entity schema="pet_store" name="doctor" color="C1D8EE" x="48" y="272" />
+		<entity schema="pet_store" name="doctor_pet_type" color="C1D8EE" x="224" y="272" />
+		<entity schema="pet_store" name="owner" color="C1D8EE" x="832" y="288" />
+		<entity schema="pet_store" name="pet_type" color="C1D8EE" x="416" y="272" />
+		<entity schema="pet_store" name="pets" color="C1D8EE" x="672" y="256" />
+		<entity schema="pet_store" name="vaccination_record" color="C1D8EE" x="256" y="544" />
+		<entity schema="pet_store" name="vaccination_record_pet" color="C1D8EE" x="592" y="528" />
+		<callout x="48" y="48" pointer="Round" >
+			<comment><![CDATA[Add tables to the layout by drag & drop from the project structure.
+Currently, the model is in offline mode, which means new tables will be created only in the model file.
+Drop this callout from its context menu.]]></comment>
+		</callout>
+	</layout>
+</project>
